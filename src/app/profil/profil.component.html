@@ -1,0 +1,24 @@
+<div class="container" *ngIf="isLoggedIn()">
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <h1 class="col-5">{{username}}</h1>
+      </div>
+      <div class="col-8 infos" *ngIf="isAdmin()">
+        <div class="row">
+          <input [(ngModel)]="nouveauNom" placeholder="Nouveau nom" class="col-3">
+          <button (click)="modifierNom()" class="col-4 modif">Modifier mon nom</button>
+        </div>
+        <div class="row">
+          <input [(ngModel)]="nouveauMdp" placeholder="Nouveau mot de passe" class="col-3" type="password" value="this.password">
+          <button (click)="modifierMdp()" class="col-4 modif">Modifier mon mot de passe</button>
+        </div>
+      </div>
+    </div>
+    <div class="row deco">
+      <button (click)="deleteUser()" class="col-2">Supprimer mon compte</button>
+      <button (click)="deconnect()" class="col-2">Déconnexion</button>
+    </div>
+  </div>
+</div>
+
