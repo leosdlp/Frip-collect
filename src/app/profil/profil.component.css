@@ -48,6 +48,8 @@ input:hover{
   place-content: center;
   padding:1rem;
   align-items: center;
+  margin-right:auto;
+  margin-left:auto;
 }
 
 .center{

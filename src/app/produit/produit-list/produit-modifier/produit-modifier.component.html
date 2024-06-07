@@ -1,12 +1,7 @@
 <div class="container">
-  <form [formGroup]="produitForm" (ngSubmit)="modifierProduit()">
+  <form [formGroup]="produitForm">
     <div class="row center">
       <div class="col-8">
-
-        <div class="row">
-          <label for="id" class="col-2">ID :</label>
-          <input type="text" placeholder="{{ produitId }}" id="id" formControlName="id" class="col-4" readonly>
-        </div>
 
         <div class="row">
           <label for="nom" class="col-2">Nom :</label>
@@ -90,7 +85,7 @@
           <button routerLink="/produit-list" routerLinkActive="active" class="col-12">Retour</button>
         </div>
         <div class="col-2">
-          <button type="submit" class="col-12">Enregistrer</button>
+          <button type="submit" class="col-12" (click)="modifierProduit()">Enregistrer</button>
         </div>
       </div>
     </div>

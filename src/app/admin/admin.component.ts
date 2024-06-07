@@ -13,11 +13,13 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { ProduitCommanderListComponent } from '../produit/produit-commander/produit-commander-list/produit-commander-list.component'
 import { PanierService } from '../panier.service';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterOutlet, RouterModule],
+  imports: [CommonModule, FormsModule, RouterOutlet, RouterModule, HttpClientModule],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css'
 })
@@ -27,9 +29,12 @@ export class AdminComponent implements OnInit{
   loginPassword:string = '';
   username:string = '';
   password:string = '';
+  email:string = '';
+  passwordVerif:string = '';
   connexion: boolean = true;
   inscription: boolean = false;
-  constructor(private authService: AdminAuthService, private fb: FormBuilder, private produitService: ProduitService, private fournisseurService: FournisseurService, private router: Router, private produitCommanderListComponent: ProduitCommanderListComponent, private panierService: PanierService) {
+  readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
+  constructor(private authService: AdminAuthService, private http: HttpClient, private fb: FormBuilder, private produitService: ProduitService, private fournisseurService: FournisseurService, private router: Router, private produitCommanderListComponent: ProduitCommanderListComponent, private panierService: PanierService) {
 
   }
 
@@ -46,11 +51,35 @@ export class AdminComponent implements OnInit{
     }
   }
 
+  addUsers() {
+    if (!this.username || !this.password || !this.email) {
+      alert("Username and password are required");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("username", this.username);
+    formData.append("password", this.password);
+    formData.append("email", this.email);
+
+    this.http.post(this.APIUrl + 'AddUsers', formData).subscribe(data => {
+      alert(data);
+    }, error => {
+      alert('Error adding user');
+    });
+  }
+
   register(): void {
-    const success = this.authService.register(this.username, this.password);
+    const verifPassword = this.password == this.passwordVerif;
+    const success = this.authService.register(this.username, this.password, this.passwordVerif, this.email);
     if (success) {
-      console.log('Inscription réussie !');
-      this.connexionForm();
+      if(verifPassword){
+        this.addUsers();
+        console.log('Inscription réussie !');
+        this.connexionForm();
+      }
+      else{
+        console.log('Les mots de passe ne sont pas similaires.');
+      }
     } else {
       console.log('L\'utilisateur existe déjà.');
     }

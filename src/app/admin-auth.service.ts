@@ -1,14 +1,30 @@
 import { Injectable } from '@angular/core';
+import { User } from './user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminAuthService {
-  private users: { username: string; password: string }[] = [
-    { username: 'admin', password: 'password' },
-  ];
+  private users: User[] = [];
+  usersTemp: any = [];
+  readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
 
   constructor() {}
+
+  setApiUsers() {
+    const newUsers = [];
+    const temp = this.usersTemp;
+    for (const user of temp) {
+      newUsers.push({ username: user.username, password: user.password, email: user.email });
+    }
+    this.users = newUsers;
+  }
+
+
+  getUsers(): User[] {
+    this.setApiUsers();
+    return this.users;
+  }
 
   isAdmin(): boolean {
     try {
@@ -30,13 +46,31 @@ export class AdminAuthService {
     return !!currentUserString;
   }
 
-  register(username: string, password: string): boolean {
+  getUsername(){
+    try {
+      const currentUserString = localStorage.getItem('currentUser');
+      if (currentUserString) {
+        const currentUser = JSON.parse(currentUserString);
+        return currentUser.username;
+      }
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+    }
+    return false;
+  }
+
+  register(username: string, password: string, verifPassword: string, email: string): boolean {
     const existingUser = this.users.find((user) => user.username === username);
     if (existingUser && username === 'admin') {
       return false;
     }
-    this.users.push({ username, password });
-    return true;
+    else{
+      if (!existingUser && verifPassword == password){
+        this.users.push({ username, password, email });
+        return true;
+      }
+    }
+    return false;
   }
 
   login(username: string, password: string): boolean {
@@ -63,8 +97,6 @@ export class AdminAuthService {
       return false;
     }
   }
-
-
 
   modifierUsername(nouveauNom: string): boolean {
     const currentUserString = localStorage.getItem('currentUser');

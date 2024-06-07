@@ -57,7 +57,6 @@ export class ProduitCommanderListComponent implements OnInit {
     if(this.produit){
       this.panierService.ajouterAuPanier(this.produit);
     }
-    console.log(this.panierService.getPanier());
   }
 
   isLoggedIn(){

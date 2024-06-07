@@ -5,22 +5,18 @@ import { Produit } from './produit.model';
   providedIn: 'root',
 })
 export class CommandeService {
-  commandeList: { [key: string]: Produit } = {};
+  commandeList:any = [];
 
   getCommande(){
+    this.setApiCommandes();
     return this.commandeList;
   }
 
-  ajouterCommande(panierList: { [key: string]: Produit }): void {
-    for (const key in panierList) {
-      if (panierList.hasOwnProperty(key)) {
-        const produit = panierList[key];
-        this.commandeList[key] = produit;
-      }
+  setApiCommandes(){
+    const newCommandes: any = [];
+    for (const commande of this.commandeList) {
+      newCommandes.push({ id: commande.id, products: commande.products, totalPrice: commande.totalPrice, username: commande.username });
     }
-  }
-
-  supprimerCommande(produit: Produit): void {
-
+    this.commandeList = newCommandes;
   }
 }

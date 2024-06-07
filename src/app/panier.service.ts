@@ -13,9 +13,6 @@ export class PanierService {
 
   ajouterAuPanier(produit: Produit): void {
     if (produit.nom in this.panierList) {
-      // if(this.panierList.nombre === 8){
-
-      // }
       this.panierList[produit.nom].nombre++;
     } else {
       this.panierList[produit.nom] = { ...produit, nombre: 1 };

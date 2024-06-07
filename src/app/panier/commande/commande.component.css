@@ -1,3 +1,32 @@
 h1{
   text-align: center;
 }
+
+.row{
+  place-content: center;
+}
+
+.cont-commande{
+  background-color: #dedede;
+  border-radius: 1rem;
+  padding:1rem;
+  margin-bottom:1rem;
+  border: 1px solid grey;
+}
+
+.cont-produit{
+  border-bottom:1px solid black;
+}
+
+.cont-produit:first-of-type{
+  border-top:1px solid black;
+}
+
+.cont-id{
+  text-align: center;
+  margin-bottom:.5rem;
+}
+
+.cont-price{
+  margin-top:0.5rem;
+}

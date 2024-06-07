@@ -7,9 +7,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { PanierFacturePdfComponent } from './panier/panier-facture-pdf/panier-facture-pdf.component';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
-  imports: [BrowserModule, ReactiveFormsModule,ProduitListComponent, CommonModule, RouterModule.forRoot(routes), PanierFacturePdfComponent],
+  imports: [BrowserModule, ReactiveFormsModule,ProduitListComponent, CommonModule, RouterModule.forRoot(routes), PanierFacturePdfComponent, HttpClientModule],
   providers: [],
   bootstrap: [],
 })

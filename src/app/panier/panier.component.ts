@@ -13,6 +13,9 @@ import { Injectable } from '@angular/core';
 import { ProduitCommanderListComponent } from '../produit/produit-commander/produit-commander-list/produit-commander-list.component'
 import { PanierService } from '../panier.service';
 import { CommandeService } from '../commande.service';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { AdminAuthService } from '../admin-auth.service';
 
 
 @Injectable({
@@ -22,15 +25,18 @@ import { CommandeService } from '../commande.service';
 @Component({
   selector: 'app-panier',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterOutlet, RouterModule],
+  imports: [CommonModule, FormsModule, RouterOutlet, RouterModule, HttpClientModule],
   templateUrl: './panier.component.html',
   styleUrl: './panier.component.css'
 })
 export class PanierComponent implements OnInit{
   panierList: { [key: string]: Produit } = {};
+  productsTemp:any = [];
   totalPanier:number= 0;
+  panierTemp: any;
+  readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
 
-  constructor(private fb: FormBuilder, private produitService: ProduitService, private fournisseurService: FournisseurService, private router: Router, private produitCommanderListComponent: ProduitCommanderListComponent, private panierService: PanierService, private commandeService: CommandeService){
+  constructor(private fb: FormBuilder, private http: HttpClient, private authService: AdminAuthService, private produitService: ProduitService, private fournisseurService: FournisseurService, private router: Router, private produitCommanderListComponent: ProduitCommanderListComponent, private panierService: PanierService, private commandeService: CommandeService){
 
   }
 
@@ -52,14 +58,49 @@ export class PanierComponent implements OnInit{
   }
   supprimerPanier(produit: Produit ): void {
     this.panierService.supprimerPanier(produit);
-    console.log(this.panierList)
     this.updatePanier();
   }
 
   commander(){
     if(this.panierList){
-      this.commandeService.ajouterCommande(this.panierList);
+      this.addCommandes();
     }
   }
 
+  addCommandes() {
+    const products = Object.keys(this.panierList).map(key => {
+      const produit = this.panierList[key];
+      return {
+        id: produit.id,
+        nom: produit.nom,
+        nombre: produit.nombre,
+        type: produit.type,
+        taille: produit.taille,
+        genre: produit.genre,
+        etat: produit.etat,
+        fournisseur: produit.fournisseur,
+        prix: produit.prix,
+      };
+    });
+
+    const totalPrice = this.totalPanier.toFixed(2);
+    const username = this.authService.getUsername();
+
+    if (!products.length || !totalPrice || !username) {
+      alert("Products, TotalPrice and Username are required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("products", JSON.stringify(products));
+    formData.append("totalPrice", totalPrice);
+    formData.append("username", username);
+
+    this.http.post(this.APIUrl + 'AddCommandes', formData).subscribe(data => {
+      alert(data);
+    }, error => {
+      console.error('Error adding produit:', error);
+      alert(`Error adding produit: ${error.message || error}`);
+    });
+  }
 }

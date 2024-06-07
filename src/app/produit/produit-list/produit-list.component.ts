@@ -10,6 +10,8 @@ import { FournisseurService } from '../../fournisseur.service';
 import { Fournisseur } from '../../fournisseur.model';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -20,11 +22,11 @@ import { Injectable } from '@angular/core';
     standalone:true,
     templateUrl: './produit-list.component.html',
     styleUrls: ['./produit-list.component.css'],
-    imports: [CommonModule, FormsModule, RouterOutlet, RouterModule],
+    imports: [CommonModule, FormsModule, RouterOutlet, RouterModule, HttpClientModule],
 
 })
 export class ProduitListComponent implements OnInit {
-  constructor(private produitService: ProduitService, private fournisseurService: FournisseurService, private router: Router) {
+  constructor(private produitService: ProduitService, private fournisseurService: FournisseurService, private router: Router, private http: HttpClient) {
   }
   produits: Produit[] = [];
   fournisseurs: Fournisseur[] = [];
@@ -36,12 +38,24 @@ export class ProduitListComponent implements OnInit {
   filtreType: string = '';
   filtrePrix!: number;
   filtreFournisseur: string = '';
+  readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
+  produitsTemp: any = [];
 
 
 
   ngOnInit(): void {
+    this.refreshProduits();
     this.produits = this.produitService.getProduits();
     this.fournisseurs = this.fournisseurService.getFournisseurs();
+  }
+
+  refreshProduits() {
+    this.http.get(this.APIUrl + 'GetProduits').subscribe(data => {
+      this.produitService.produitsTemp = data;
+      this.produitsTemp = data;
+    });
+    this.produitService.setApiProduits();
+    this.produitService.getProduits();
   }
 
   filtrerProduits() {
@@ -89,6 +103,15 @@ export class ProduitListComponent implements OnInit {
 
   supprimerProduit(id: number) {
     this.produitService.deleteProduit(id);
+    this.deleteProduits(id);
+    this.refreshProduits();
     this.filtrerProduits();
+  }
+
+  deleteProduits(id:any){
+    this.http.delete(this.APIUrl+'DeleteProduits?id='+id).subscribe(data=>{
+      alert(data);
+      this.refreshProduits();
+    })
   }
 }
