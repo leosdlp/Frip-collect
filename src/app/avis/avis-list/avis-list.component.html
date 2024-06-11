@@ -1,0 +1,20 @@
+<div class="container">
+  <h1>Commandes</h1>
+  <div class="row cont-avis" *ngFor="let avis of this.avisList">
+    <div class="col-12">
+      <div class="col-3">
+        <strong>Id:</strong> {{ avis.id }}
+      </div>
+      <div class="col-3">
+        <strong>Étoile:</strong> {{ avis.etoile }}
+      </div>
+      <div class="col-3">
+        <strong>Nom:</strong> {{ avis.username }}
+      </div>
+    </div>
+    <div class="col-12 description">
+      <strong>Description:</strong> {{ avis.description }}
+    </div>
+    <button (click)="deleteAvis(avis.id)" class="col-2">Supprimer</button>
+  </div>
+</div>

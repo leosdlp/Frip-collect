@@ -14,6 +14,8 @@ import { AdminGuard } from './guards/admin.guard';
 import { ProfilComponent } from './profil/profil.component';
 import { PanierFacturePdfComponent } from './panier/panier-facture-pdf/panier-facture-pdf.component';
 import { CommandeComponent } from './panier/commande/commande.component';
+import { AvisComponent } from './avis/avis.component';
+import { AvisListComponent } from './avis/avis-list/avis-list.component';
 
 
 export const routes: Routes = [
@@ -32,4 +34,6 @@ export const routes: Routes = [
   { path: 'connexion', component: AdminComponent },
   { path: 'profil', component: ProfilComponent },
   { path: 'facture', component: PanierFacturePdfComponent },
+  { path: 'avis', component: AvisComponent },
+  { path: 'avis-list', component: AvisListComponent, canActivate: [AdminGuard] },
 ];

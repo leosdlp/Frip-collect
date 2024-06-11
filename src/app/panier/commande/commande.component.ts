@@ -35,16 +35,16 @@ export class CommandeComponent implements OnInit{
   ngOnInit(): void {
     this.refreshCommandes();
     this.commandeList = this.commandeService.getCommande();
-  }
+    }
 
-  refreshCommandes() {
-    this.http.get(this.APIUrl + 'GetCommandes').subscribe(data => {
-      this.commandeService.commandeList = data;
-      this.productsTemp = data;
-    });
-    this.commandeService.setApiCommandes();
-    this.commandeService.getCommande();
-  }
+    refreshCommandes() {
+      this.http.get(this.APIUrl + 'GetCommandes').subscribe(data => {
+        this.commandeService.commandeList = data;
+        this.productsTemp = data;
+      });
+      this.commandeService.setApiCommandes();
+      this.commandeService.getCommande();
+    }
 
   getObjectKeys(obj: any): string[] {
     return Object.keys(obj);
@@ -63,5 +63,10 @@ export class CommandeComponent implements OnInit{
     return JSON.parse(jsonString);
   }
 
-
+  deleteCommandes(id:any){
+      this.http.delete(this.APIUrl+'DeleteCommandes?id='+id).subscribe(data=>{
+        alert(data);
+      })
+    this.refreshCommandes();
+  }
 }

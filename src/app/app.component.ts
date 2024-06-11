@@ -14,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
 import { FournisseurService } from './fournisseur.service';
 import { ProduitService } from './produit.service';
 import { CommandeService } from './commande.service';
+import { AvisService } from './avis.service';
 
 @Component({
   selector: 'app-root',
@@ -40,8 +41,9 @@ export class AppComponent implements OnInit {
   fournisseursTemp: any = [];
   produitsTemp: any = [];
   productsTemp: any = [];
+  avisTemp: any = [];
 
-  constructor(private router: Router, private commandeService : CommandeService,  private authService: AdminAuthService, private produitService: ProduitService,private http: HttpClient, private fournisseurService: FournisseurService) { }
+  constructor(private router: Router, private commandeService : CommandeService,  private authService: AdminAuthService, private produitService: ProduitService,private http: HttpClient, private fournisseurService: FournisseurService, private avisService: AvisService) { }
 
   ngOnInit(): void {
     this.refreshUsers();
@@ -84,8 +86,18 @@ export class AppComponent implements OnInit {
     this.commandeService.getCommande();
   }
 
+  refreshAvis() {
+    this.http.get(this.APIUrl + 'GetAvis').subscribe(data => {
+      this.avisService.avisTemp = data;
+      this.avisTemp = data;
+    });
+    this.avisService.setApiAvis();
+    this.avisService.getAvis();
+  }
+
   test(){
-    console.log(this.commandeService.getCommande());
+    console.log(this.avisService.getAvis());
+    console.log(this.avisTemp);
   }
 
   deleteUsers(username:any){

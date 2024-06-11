@@ -70,7 +70,7 @@ export class FournisseurListComponent implements OnInit {
   deleteUsers(id:any){
     this.http.delete(this.APIUrl+'DeleteFournisseurs?id='+id).subscribe(data=>{
       alert(data);
-      this.refreshFournisseurs();
-    })
+      })
+    this.refreshFournisseurs();
   }
 }

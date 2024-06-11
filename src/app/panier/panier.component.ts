@@ -10,7 +10,7 @@ import { FournisseurService } from '../fournisseur.service';
 import { Fournisseur } from '../fournisseur.model';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { ProduitCommanderListComponent } from '../produit/produit-commander/produit-commander-list/produit-commander-list.component'
+import { ProduitCommanderListComponent } from '../produit/produit-commander/produit-commander-list/produit-commander-list.component';
 import { PanierService } from '../panier.service';
 import { CommandeService } from '../commande.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -64,6 +64,9 @@ export class PanierComponent implements OnInit{
   commander(){
     if(this.panierList){
       this.addCommandes();
+      this.panierService.panierList = {};
+      this.panierList = {};
+      this.totalPanier = 0;
     }
   }
 

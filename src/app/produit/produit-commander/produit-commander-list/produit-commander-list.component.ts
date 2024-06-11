@@ -56,6 +56,7 @@ export class ProduitCommanderListComponent implements OnInit {
   ajouterPanier(): void {
     if(this.produit){
       this.panierService.ajouterAuPanier(this.produit);
+      this.router.navigate(['/panier']);
     }
   }
 
