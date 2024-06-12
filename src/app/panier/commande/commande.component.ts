@@ -27,6 +27,8 @@ export class CommandeComponent implements OnInit{
   commandeList: any = [];
   readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
   productsTemp:any = {};
+  filtreId = '';
+  rechercheCommande = '';
 
 
   constructor(private fb: FormBuilder, private produitService: ProduitService, private http: HttpClient, private fournisseurService: FournisseurService, private router: Router, private produitCommanderListComponent: ProduitCommanderListComponent, private panierService: PanierService, private commandeService: CommandeService){
@@ -68,5 +70,17 @@ export class CommandeComponent implements OnInit{
         alert(data);
       })
     this.refreshCommandes();
+  }
+
+  filtrerCommandes() {
+    const commandesList = this.commandeService.getCommande();
+
+    this.productsTemp = commandesList.filter((commande: { username: string; id: number }) =>
+      commande.username.toLowerCase().includes(this.rechercheCommande.toLowerCase())
+    );
+
+    if (this.filtreId !== '') {
+      this.productsTemp = this.productsTemp.filter((commande: { username: string; id: number }) => commande.id.toString() == this.filtreId);
+    }
   }
 }

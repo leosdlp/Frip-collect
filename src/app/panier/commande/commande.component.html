@@ -1,5 +1,11 @@
 <div class="container">
   <h1>Commandes</h1>
+  <div class="row filtres">
+    <div class="col-12">
+      <input type="text" [(ngModel)]="rechercheCommande" (input)="filtrerCommandes()" placeholder="Rechercher un utilisateur" class="col-5">
+      <input type="text" id="filtreId" class="col-1" (input)="filtrerCommandes()" [(ngModel)]="filtreId" placeholder="Id">
+    </div>
+  </div>
   <div *ngFor="let key of getObjectKeys(productsTemp)" class="row">
     <div class="col-8 cont-commande">
       <div class="row">
@@ -24,6 +30,9 @@
             </div>
             <div class="col-3">
               <strong>Taille:</strong> {{ product.taille }}
+            </div>
+            <div class="col-3">
+              <strong>Nombre:</strong> {{ product.nombre }}
             </div>
             <div class="col-3">
               <strong>Prix:</strong> {{ product.prix }}

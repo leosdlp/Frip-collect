@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { AdminAuthService } from '../../admin-auth.service';
 import { AvisService } from '../../avis.service';
+import { Avis } from '../../avis.models';
 
 @Component({
   selector: 'app-avis-list',
@@ -17,8 +18,11 @@ import { AvisService } from '../../avis.service';
   styleUrl: './avis-list.component.css'
 })
 export class AvisListComponent implements OnInit{
-  avisList:any = [];
+  avisList:Avis[] = [];
   avisTemp:any = [];
+  filtreId = '';
+  rechercheAvis = '';
+  filtreEtoile = '';
   readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
 
   constructor(private fb: FormBuilder, private http: HttpClient, private authService: AdminAuthService, private router: Router, private avisService : AvisService){
@@ -43,6 +47,22 @@ export class AvisListComponent implements OnInit{
     this.http.delete(this.APIUrl+'DeleteAvis?id='+id).subscribe(data=>{
       alert(data);
     })
-  this.refreshAvis();
-}
+    this.refreshAvis();
+  }
+
+  filtrerAvis() {
+    const avisList = this.avisService.getAvis();
+
+    this.avisList = avisList.filter((avis: { username: string; id: number }) =>
+      avis.username.toLowerCase().includes(this.rechercheAvis.toLowerCase())
+    );
+
+    if (this.filtreId !== '') {
+      this.avisList = this.avisList.filter(avis => avis.id.toString() === this.filtreId);
+    }
+
+    if (this.filtreEtoile !== '') {
+      this.avisList = this.avisList.filter(avis => avis.etoile.toString() === this.filtreEtoile);
+    }
+  }
 }
