@@ -36,8 +36,12 @@ export class AvisComponent implements OnInit{
     const newUsername = this.authService.getUsername();
     const newEtoile = this.etoile;
 
-    if (!newdescription || !newUsername || !newEtoile) {
-      alert("Name and description are required");
+    if (!newdescription || !newEtoile) {
+      alert("description and etoile are required");
+      return;
+    }
+    if (!newUsername) {
+      alert("You must be logged in");
       return;
     }
     const formData = new FormData();

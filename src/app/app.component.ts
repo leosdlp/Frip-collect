@@ -95,11 +95,6 @@ export class AppComponent implements OnInit {
     this.avisService.getAvis();
   }
 
-  test(){
-    console.log(this.avisService.getAvis());
-    console.log(this.avisTemp);
-  }
-
   deleteUsers(username:any){
     if (username !='admin'){
       this.http.delete(this.APIUrl+'DeleteUsers?username='+username).subscribe(data=>{
