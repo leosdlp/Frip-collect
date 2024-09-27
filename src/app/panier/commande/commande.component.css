@@ -38,3 +38,15 @@ button{
 h1{
   color: rgb(223, 109, 44);
 }
+
+.filters {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  display: flex;
+}
+
+input, select {
+  border-radius: .5rem;
+  border: 1px solid grey;
+}

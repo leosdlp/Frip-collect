@@ -62,99 +62,99 @@ export class PanierComponent implements OnInit{
   }
 
   commander(){
-    if(this.panierList){
-      this.addCommandes();
-    }
+    // if(this.panierList){
+    //   this.addCommandes();
+    // }
   }
 
-  addCommandes() {
-    const products = Object.keys(this.panierList).map(key => {
-      const produit = this.panierList[key];
-      return {
-        id: produit.id,
-        nom: produit.nom,
-        nombre: produit.nombre,
-        type: produit.type,
-        taille: produit.taille,
-        genre: produit.genre,
-        etat: produit.etat,
-        fournisseur: produit.fournisseur,
-        prix: produit.prix,
-      };
-    });
+  // addCommandes() {
+  //   const products = Object.keys(this.panierList).map(key => {
+  //     const produit = this.panierList[key];
+  //     return {
+  //       id: produit.id,
+  //       nom: produit.nom,
+  //       nombre: produit.nombre,
+  //       type: produit.type,
+  //       taille: produit.taille,
+  //       genre: produit.genre,
+  //       etat: produit.etat,
+  //       fournisseur: produit.fournisseur,
+  //       prix: produit.prix,
+  //     };
+  //   });
 
-    const totalPrice = this.totalPanier.toFixed(2);
-    const username = this.authService.getUsername();
+  //   const totalPrice = this.totalPanier.toFixed(2);
+  //   const username = this.authService.getUsername();
 
-    if (!products.length || !totalPrice || !username) {
-      alert("Products, TotalPrice and Username are required");
-      return;
-    }
-    for (const produit of products) {
-      const produitAchete = this.produitService.getProduitById(produit.id);
-      if (!produitAchete) {
-        alert(`Produit ${produit.nom} not found in productService`);
-        return;
-      }
+  //   if (!products.length || !totalPrice || !username) {
+  //     alert("Products, TotalPrice and Username are required");
+  //     return;
+  //   }
+  //   for (const produit of products) {
+  //     const produitAchete = this.produitService.getProduitById(produit.id);
+  //     if (!produitAchete) {
+  //       alert(`Produit ${produit.nom} not found in productService`);
+  //       return;
+  //     }
 
-      const nombre = produitAchete.nombre - produit.nombre;
-      if (nombre < 0) {
-        alert(`Not enough stock for product ${produit.nom}. Update canceled.`);
-        return;
-      }
-    }
+  //     const nombre = produitAchete.nombre - produit.nombre;
+  //     if (nombre < 0) {
+  //       alert(`Not enough stock for product ${produit.nom}. Update canceled.`);
+  //       return;
+  //     }
+  //   }
 
-    const formData = new FormData();
-    formData.append("products", JSON.stringify(products));
-    formData.append("totalPrice", totalPrice);
-    formData.append("username", username);
+  //   const formData = new FormData();
+  //   formData.append("products", JSON.stringify(products));
+  //   formData.append("totalPrice", totalPrice);
+  //   formData.append("username", username);
 
-    this.http.post(this.APIUrl + 'AddCommandes', formData).subscribe(data => {
-      alert(data);
-      for (const produit of products) {
-        this.updateProduit(produit);
-        this.panierService.panierList = {};
-        this.panierList = {};
-        this.totalPanier = 0;
-      }
-    }, error => {
-      console.error('Error adding commande:', error);
-      alert(`Error adding commande: ${error.message || error}`);
-    });
-  }
+  //   this.http.post(this.APIUrl + 'AddCommandes', formData).subscribe(data => {
+  //     alert(data);
+  //     for (const produit of products) {
+  //       this.updateProduit(produit);
+  //       this.panierService.panierList = {};
+  //       this.panierList = {};
+  //       this.totalPanier = 0;
+  //     }
+  //   }, error => {
+  //     console.error('Error adding commande:', error);
+  //     alert(`Error adding commande: ${error.message || error}`);
+  //   });
+  // }
 
-  updateProduit(produit: any) {
-    const id = produit.id;
-    const nombreAchat = produit.nombre;
+  // updateProduit(produit: any) {
+  //   const id = produit.id;
+  //   const nombreAchat = produit.nombre;
 
-    const produitAchete = this.produitService.getProduitById(id);
-    if (!produitAchete) {
-      alert("Produit not found in productService");
-      return;
-    }
+  //   const produitAchete = this.produitService.getProduitById(id);
+  //   if (!produitAchete) {
+  //     alert("Produit not found in productService");
+  //     return;
+  //   }
 
-    const nombre = produitAchete.nombre - nombreAchat;
+  //   const nombre = produitAchete.nombre - nombreAchat;
 
-    const formData = new FormData();
-    formData.append("id", id.toString());
-    formData.append("nom", produit.nom);
-    formData.append("type", produit.type);
-    formData.append("genre", produit.genre);
-    formData.append("taille", produit.taille);
-    formData.append("prix", produit.prix.toString());
-    formData.append("etat", produit.etat);
-    formData.append("fournisseur", produit.fournisseur);
-    formData.append("nombre", nombre.toString());
+  //   const formData = new FormData();
+  //   formData.append("id", id.toString());
+  //   formData.append("nom", produit.nom);
+  //   formData.append("type", produit.type);
+  //   formData.append("genre", produit.genre);
+  //   formData.append("taille", produit.taille);
+  //   formData.append("prix", produit.prix.toString());
+  //   formData.append("etat", produit.etat);
+  //   formData.append("fournisseur", produit.fournisseur);
+  //   formData.append("nombre", nombre.toString());
 
-    this.http.post(this.APIUrl + 'UpdateProduits', formData).subscribe(
-      data => {
-        alert('Product updated successfully');
-      },
-      error => {
-        console.error('Error updating product:', error);
-        alert(`Error updating product: ${error.message || error}`);
-      }
-    );
-  }
+  //   this.http.post(this.APIUrl + 'UpdateProduits', formData).subscribe(
+  //     data => {
+  //       alert('Product updated successfully');
+  //     },
+  //     error => {
+  //       console.error('Error updating product:', error);
+  //       alert(`Error updating product: ${error.message || error}`);
+  //     }
+  //   );
+  // }
 
 }

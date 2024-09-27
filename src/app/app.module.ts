@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms'; // Importez le module des formulaires réactifs
 import { AppComponent } from './app.component';
 import { ProduitListComponent } from './produit/produit-list/produit-list.component';
+import { ProduitCommanderComponent } from './produit/produit-commander/produit-commander.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
@@ -11,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
-  imports: [BrowserModule, ReactiveFormsModule,ProduitListComponent, CommonModule, RouterModule.forRoot(routes), PanierFacturePdfComponent, HttpClientModule],
+  imports: [BrowserModule, ReactiveFormsModule,ProduitListComponent, CommonModule, RouterModule.forRoot(routes), PanierFacturePdfComponent, HttpClientModule, ProduitCommanderComponent],
   providers: [],
   bootstrap: [],
 })

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Produit } from '../../produit.model';
+import { Classroom } from '../../classroom.model';
 import { CommonModule } from '@angular/common';
 import { ProduitService } from '../../produit.service';
 import { FormsModule } from '@angular/forms';
@@ -28,16 +29,12 @@ import { HttpClient } from '@angular/common/http';
 export class ProduitListComponent implements OnInit {
   constructor(private produitService: ProduitService, private fournisseurService: FournisseurService, private router: Router, private http: HttpClient) {
   }
-  produits: Produit[] = [];
+  classrooms: Classroom[] = [];
   fournisseurs: Fournisseur[] = [];
   rechercheProduit = '';
-  filtreGenre: string = '';
-  filtreTaille: string = '';
-  filtreEtat: string = '';
-  filtreId!: number;
-  filtreType: string = '';
-  filtrePrix!: number;
-  filtreFournisseur: string = '';
+  filtreLocalisation!: number;
+  filtreLibre!: string;
+  filtreRecherche!: string;
   readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
   produitsTemp: any = [];
 
@@ -45,56 +42,45 @@ export class ProduitListComponent implements OnInit {
 
   ngOnInit(): void {
     this.refreshProduits();
-    this.produits = this.produitService.getProduits();
-    this.fournisseurs = this.fournisseurService.getFournisseurs();
+    this.classrooms = this.produitService.getProduits();
+    this.filtrerClassrooms()
   }
 
   refreshProduits() {
-    this.http.get(this.APIUrl + 'GetProduits').subscribe(data => {
-      this.produitService.produitsTemp = data;
+    this.http.get(this.APIUrl + 'GetClassrooms').subscribe(data => {
+      this.produitService.classroomsTemp = data;
       this.produitsTemp = data;
     });
     this.produitService.setApiProduits();
     this.produitService.getProduits();
   }
 
-  filtrerProduits() {
-    // Récupérez les produits
-    const produits = this.produitService.getProduits();
+  filtrerClassrooms() {
+    // Récupérer les produits (classrooms)
+    let classrooms = this.produitService.getProduits();
 
-    // Filtrer par recherche
-    this.produits = produits.filter(produit =>
-      produit.nom.toLowerCase().includes(this.rechercheProduit.toLowerCase())
-    );
+    // Filtrer par étage (localisation)
+    if (this.filtreLocalisation && (String(this.filtreLocalisation) === "1" || String(this.filtreLocalisation) === "2" || String(this.filtreLocalisation) === "3")) {
+      classrooms = classrooms.filter(classroom => classroom.localisation === this.filtreLocalisation);
+    }
 
-    if (this.filtreTaille !== '') {
-      this.produits = this.produits.filter(produit => produit.taille === this.filtreTaille);
+    // Filtrer par occupation (libre)
+    if (this.filtreLibre !== "" && this.filtreLibre !== undefined) {
+      classrooms = classrooms.filter(classroom => String(classroom.libre) === this.filtreLibre);
     }
-    if (this.filtreGenre !== '') {
-      this.produits = this.produits.filter(produit => produit.genre === this.filtreGenre);
+
+    // Filtrer par recherche (nom_salle)
+    if (this.filtreRecherche !== "" && this.filtreRecherche !== undefined) {
+      classrooms = classrooms.filter(classroom =>
+        classroom.nom_salle.toLowerCase().includes(this.filtreRecherche.toLowerCase())
+      );
     }
-    if (this.filtreEtat !== '') {
-      this.produits = this.produits.filter(produit => produit.etat === this.filtreEtat);
-    }
-    if (this.filtreFournisseur !== '') {
-      this.produits = this.produits.filter(produit => produit.fournisseur === this.filtreFournisseur);
-    }
-    if (this.filtreId === null || this.filtreId === undefined || this.filtreId.toString().trim() === '') {
-      this.filtreId = 0;
-    }
-    if (this.filtreId !== 0) {
-      this.produits = this.produits.filter(produit => produit.id === this.filtreId);
-    }
-    if (this.filtreType !== '') {
-      this.produits = this.produits.filter(produit => produit.type === this.filtreType);
-    }
-    if (this.filtrePrix === null || this.filtrePrix === undefined || this.filtrePrix.toString().trim() === '') {
-      this.filtrePrix = 0;
-    }
-    if (this.filtrePrix !== 0) {
-      this.produits = this.produits.filter(produit => produit.prix <= this.filtrePrix);
-    }
+
+
+    // Assigner les résultats filtrés à la variable classrooms de la classe
+    this.classrooms = classrooms;
   }
+
 
   modifierProduit(id: number) {
     this.produitService.setSelectedProduitId(id);
@@ -105,11 +91,10 @@ export class ProduitListComponent implements OnInit {
     this.produitService.deleteProduit(id);
     this.deleteProduits(id);
     this.refreshProduits();
-    this.filtrerProduits();
   }
 
   deleteProduits(id:any){
-    this.http.delete(this.APIUrl+'DeleteProduits?id='+id).subscribe(data=>{
+    this.http.delete(this.APIUrl+'DeleteClassrooms?id='+id).subscribe(data=>{
       alert(data);
       this.refreshProduits();
     })

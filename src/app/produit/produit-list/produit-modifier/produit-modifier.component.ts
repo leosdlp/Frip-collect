@@ -21,41 +21,42 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrl: './produit-modifier.component.css'
 })
 export class ProduitModifierComponent implements OnInit {
-  produitForm: FormGroup;
+  classroomForm: FormGroup;
   produitId: number = 0;
   fournisseurs: Fournisseur[] = [];
   readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
 
-  constructor(private fb: FormBuilder, private router: Router, private http: HttpClient, private produitService: ProduitService, private produitListComponent: ProduitListComponent, private fournisseurService: FournisseurService) {
-    this.produitForm = this.fb.group({
-      id:[],
-      nom: [''],
-      type: [''],
-      genre: [''],
-      taille: [''],
-      prix: [],
-      etat: [''],
-      fournisseur: [''],
-      nombre: [],
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private http: HttpClient,
+    private produitService: ProduitService,
+    private produitListComponent: ProduitListComponent,
+    private fournisseurService: FournisseurService
+  ) {
+    this.classroomForm = this.fb.group({
+      id_salle: ['', Validators.required],
+      nom_salle: ['', Validators.required],
+      capacite: ['', Validators.required],
+      equipements: ['', Validators.required],
+      localisation: ['', Validators.required],
+      libre: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.fournisseurs = this.fournisseurService.getFournisseurs();
+    // this.fournisseurs = this.fournisseurService.getFournisseurs();
     this.produitId = this.produitService.getSelectedProduitId();
-    const produit = this.produitService.getProduitById(this.produitId);
+    const classroom = this.produitService.getProduitById(this.produitId);
 
-    if (produit) {
-      this.produitForm.patchValue({
-        id: produit.id,
-        nom: produit.nom,
-        type: produit.type,
-        genre: produit.genre,
-        taille: produit.taille,
-        prix: produit.prix,
-        etat: produit.etat,
-        fournisseur: produit.fournisseur,
-        nombre: produit.nombre
+    if (classroom) {
+      this.classroomForm.patchValue({
+        id_salle: classroom.id_salle,
+        nom_salle: classroom.nom_salle,
+        capacite: classroom.capacite,
+        equipements: classroom.equipements,
+        localisation: classroom.localisation,
+        libre: classroom.libre,
       });
     }
   }
@@ -66,41 +67,45 @@ export class ProduitModifierComponent implements OnInit {
   }
 
   updateProduit() {
-    const id = this.produitId;
-    const nom = this.produitForm.value.nom;
-    const type = this.produitForm.value.type;
-    const genre = this.produitForm.value.genre;
-    const taille = this.produitForm.value.taille;
-    const prix = this.produitForm.value.prix;
-    const etat = this.produitForm.value.etat;
-    const fournisseur = this.produitForm.value.fournisseur;
-    const nombre = this.produitForm.value.nombre;
+    const id_salle = this.produitId;
+    const nom_salle = this.classroomForm.value.nom_salle;
+    const capacite = this.classroomForm.value.capacite;
+    const equipements = this.classroomForm.value.equipements;
+    const localisation = this.classroomForm.value.localisation;
+    const libre = this.classroomForm.value.libre;
 
-    if (!nom || !type || !genre || !taille || !prix || !etat || !fournisseur || !nombre) {
+    if (!nom_salle || !capacite || !equipements || !localisation ) {
       alert("Current username is required");
       return;
     }
 
     const formData = new FormData();
-    formData.append("id", id.toString());
-    if (nom) formData.append("nom", nom);
-    if (type) formData.append("type", type);
-    if (genre) formData.append("genre", genre);
-    if (taille) formData.append("taille", taille);
-    if (prix) formData.append("prix", prix);
-    if (etat) formData.append("etat", etat);
-    if (fournisseur) formData.append("fournisseur", fournisseur);
-    if (nombre) formData.append("nombre", nombre);
+    formData.append("id_salle", id_salle.toString());
+    if (nom_salle) formData.append("nom_salle", nom_salle);
+    if (capacite) formData.append("capacite", capacite);
+    if (equipements) formData.append("equipements", equipements);
+    if (localisation) formData.append("localisation", localisation);
+    if (libre !== undefined) formData.append("libre", libre);
 
-    this.http.post(this.APIUrl + 'UpdateProduits', formData).subscribe(
+    this.http.post(this.APIUrl + 'UpdateClassrooms', formData).subscribe(
       data => {
-        alert('User updated successfully');
+        alert('Classroom updated successfully');
         this.router.navigate(['/produit-list']);
       },
       error => {
         console.error('Error updating user:', error);
       }
     );
+  }
+
+  isLibreChecked(): boolean {
+    const libreControl = this.classroomForm.get('libre');
+    return libreControl ? libreControl.value : false;
+  }
+
+  onLibreChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.classroomForm.get('libre')?.setValue(input.checked);
   }
 }
 

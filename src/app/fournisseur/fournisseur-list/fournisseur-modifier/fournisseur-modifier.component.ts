@@ -34,13 +34,13 @@ export class FournisseurModifierComponent implements OnInit {
 
   ngOnInit(): void {
     this.fournisseurId = this.fournisseurService.getSelectedFournisseurId();
-    const fournisseur = this.fournisseurService.getFournisseurById(this.fournisseurId);
-    this.fournisseurName = fournisseur?.nom;
+    // const fournisseur = this.fournisseurService.getFournisseurById(this.fournisseurId);
+    // this.fournisseurName = fournisseur?.nom;
   }
 
   modifierFournisseur() {
     const fournisseurModifie = this.fournisseurForm.value;
-    this.fournisseurService.updateFournisseur(this.fournisseurId, fournisseurModifie);
+    // this.fournisseurService.updateFournisseur(this.fournisseurId, fournisseurModifie);
   }
 
   updateFournisseur() {

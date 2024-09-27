@@ -1,23 +1,23 @@
 <div class="container">
-  <h1>Liste des fournisseurs</h1>
+  <h1>Liste des Utilisateurs</h1>
   <div class="row">
     <div class="col-10">
       <div class="row">
-        <button routerLink="/fournisseur" routerLinkActive="active" class="col-2 ajout">Ajouter un fournisseur</button>
-        <input type="text" [(ngModel)]="rechercheFournisseur" (input)="filtrerFournisseurs()" placeholder="Rechercher un fournisseur" class="col-5">
+        <!-- <button routerLink="/fournisseur" routerLinkActive="active" class="col-2 ajout">Ajouter un profil</button> -->
+        <input type="text" [(ngModel)]="rechercheUser" (input)="filtrerFournisseurs()" placeholder="Rechercher un utilisateur" class="col-5">
       </div>
     </div>
   </div>
   <div class="row">
-    <div *ngFor="let fournisseur of fournisseurs" class="col-3">
+    <div *ngFor="let user of users" class="col-3">
       <div class="col-12">
-        <h2>{{ fournisseur.nom }}</h2>
+        <h2>{{ user.username }}</h2>
         <div class="infos row">
-          <p class="col-3">Id : {{ fournisseur.id }}</p>
+          <p class="col-10">Email : {{ user.email }}</p>
         </div>
         <div class="buttons row">
-          <button (click)="supprimerFournisseur(fournisseur.id)" class="col-4">Supprimer</button>
-          <button (click)="modifierFournisseur(fournisseur.id)" class="col-4">Modifier</button>
+          <!-- <button (click)="supprimerFournisseur(fournisseur.id)" class="col-4">Supprimer</button>
+          <button (click)="modifierFournisseur(fournisseur.id)" class="col-4">Modifier</button> -->
         </div>
       </div>
     </div>

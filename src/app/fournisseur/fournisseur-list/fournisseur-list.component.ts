@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Fournisseur } from '../../fournisseur.model';
+import { User } from '../../user.model';
 import { CommonModule } from '@angular/common';
 import { FournisseurService } from '../../fournisseur.service';
+import { AdminAuthService } from '../../admin-auth.service';
 import { RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -23,54 +25,54 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class FournisseurListComponent implements OnInit {
-  fournisseurs: Fournisseur[] = [];
-  rechercheFournisseur = '';
+  users: User[] = [];
+  rechercheUser = '';
   readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
-  fournisseursTemp: any = [];
+  usersTemp: any = [];
 
-  constructor(private fournisseurService: FournisseurService, private router: Router, private http: HttpClient) {
+  constructor(private fournisseurService: FournisseurService, private router: Router, private http: HttpClient, private authService: AdminAuthService) {
   }
 
   ngOnInit(): void {
     this.refreshFournisseurs();
-    this.fournisseurs = this.fournisseurService.getFournisseurs();
+    this.users = this.authService.getUsers();
   }
 
   filtrerFournisseurs() {
-    if (this.rechercheFournisseur === '') {
-      this.fournisseurs = this.fournisseurService.getFournisseurs();
+    if (this.rechercheUser === '') {
+      this.users = this.authService.getUsers();
     } else {
-      this.fournisseurs = this.fournisseurService.getFournisseurs().filter(fournisseur =>
-        fournisseur.nom.toLowerCase().includes(this.rechercheFournisseur.toLowerCase())
+      this.users = this.authService.getUsers().filter(user =>
+        user.username.toLowerCase().includes(this.rechercheUser.toLowerCase())
       );
     }
   }
 
-  modifierFournisseur(id: number) {
-    this.fournisseurService.setSelectedFournisseurId(id);
-    this.router.navigate(['/fournisseur-modifier', id]);
-  }
+  // modifierFournisseur(id: number) {
+  //   this.fournisseurService.setSelectedFournisseurId(id);
+  //   this.router.navigate(['/fournisseur-modifier', id]);
+  // }
 
-  supprimerFournisseur(id: number) {
-    this.fournisseurService.deleteFournisseur(id);
-    this.deleteUsers(id);
-    this.refreshFournisseurs();
-    this.filtrerFournisseurs();
-  }
+  // supprimerFournisseur(id: number) {
+  //   this.fournisseurService.deleteFournisseur(id);
+  //   this.deleteUsers(id);
+  //   this.refreshFournisseurs();
+  //   this.filtrerFournisseurs();
+  // }
 
   refreshFournisseurs() {
-    this.http.get(this.APIUrl + 'GetFournisseurs').subscribe(data => {
-      this.fournisseurService.fournisseursTemp = data;
-      this.fournisseursTemp = data;
+    this.http.get(this.APIUrl + 'GetUsers').subscribe(data => {
+      this.authService.usersTemp = data;
+      this.usersTemp = data;
     });
-    this.fournisseurService.setApiFournisseurs();
-    this.fournisseurService.getFournisseurs();
+    this.authService.setApiUsers();
+    this.authService.getUsers();
   }
 
-  deleteUsers(id:any){
-    this.http.delete(this.APIUrl+'DeleteFournisseurs?id='+id).subscribe(data=>{
-      alert(data);
-      })
-    this.refreshFournisseurs();
-  }
+  // deleteUsers(id:any){
+  //   this.http.delete(this.APIUrl+'DeleteFournisseurs?id='+id).subscribe(data=>{
+  //     alert(data);
+  //     })
+  //   this.refreshFournisseurs();
+  // }
 }

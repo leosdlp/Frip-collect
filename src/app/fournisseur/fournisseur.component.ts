@@ -56,12 +56,12 @@ export class FournisseurComponent implements OnInit {
   }
 
   refreshFournisseurs() {
-    this.http.get(this.APIUrl + 'GetFournisseurs').subscribe(data => {
-      this.fournisseurService.fournisseursTemp = data;
-      this.fournisseursTemp = data;
-    });
-    this.fournisseurService.setApiFournisseurs();
-    this.fournisseurService.getFournisseurs();
+    // this.http.get(this.APIUrl + 'GetFournisseurs').subscribe(data => {
+    //   this.fournisseurService.fournisseursTemp = data;
+    //   this.fournisseursTemp = data;
+    // });
+    // this.fournisseurService.setApiFournisseurs();
+    // this.fournisseurService.getFournisseurs();
   }
 
   deleteUsers(id:any){

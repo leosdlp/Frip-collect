@@ -1,27 +1,24 @@
 <div class="container">
   <div class="row">
     <div class="col-8">
-      <h1>{{produit?.nom}}</h1>
+      <h1>{{classroom?.nom_salle}}</h1>
       <div class="infos row">
-        <p class="col-5">Fournisseur : {{ produit?.fournisseur }}</p>
-        <p class="col-5">Type : {{ produit?.type }}</p>
+        <p class="col-5">Capacité : {{ classroom?.capacite }}</p>
+        <p class="col-5">Équipements : {{ classroom?.equipements }}</p>
       </div>
       <div class="infos row">
-        <p class="col-5">Genre : {{ produit?.genre }}</p>
-        <p class="col-5">Taille : {{ produit?.taille }}</p>
+        <p class="col-5">Localisation : {{ classroom?.localisation }}</p>
+        <p class="col-5" *ngIf="classroom?.libre == true">Libre</p>
+        <p class="col-5" *ngIf="classroom?.libre == false">Occupée</p>
       </div>
-      <div class="infos row">
-        <p class="col-5">État : {{ produit?.etat }}</p>
-        <p class="col-5">Prix : {{ produit?.prix }}</p>
-      </div>
+      <input class="col-4" type="number" [(ngModel)]="this.dureeReservation" id="duree">
       <div class="row buttons">
         <div class="row gap">
           <button routerLink="/produit-commander" routerLinkActive="active" class="col-2">Retour</button>
-          <button *ngIf="isLoggedIn()" (click)="ajouterPanier()" class="col-3 ajout">Ajouter au panier</button>
         </div>
         <div class="row">
-          <button routerLink="/connexion" *ngIf="!isLoggedIn()" class="col-5 ajout">Connectez-vous pour ajouter au panier</button>
-          <button routerLink="/panier" routerLinkActive="active" class="col-3" *ngIf="isLoggedIn()">Voir mon panier</button>
+          <button routerLink="/connexion" *ngIf="!isLoggedIn()" class="col-5 ajout">Connectez-vous pour réserver une salle</button>
+          <button routerLinkActive="active" class="col-3" *ngIf="isLoggedIn()" (click)="claimClassroom(classroom)">Réserver</button>
         </div>
       </div>
     </div>

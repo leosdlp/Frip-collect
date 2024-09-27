@@ -28,8 +28,9 @@ export class CommandeComponent implements OnInit{
   readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
   productsTemp:any = {};
   filtreId = '';
-  rechercheCommande = '';
-
+  rechercheSalle = '';
+  rechercheUser = '';
+  rechercheEtage = '';
 
   constructor(private fb: FormBuilder, private produitService: ProduitService, private http: HttpClient, private fournisseurService: FournisseurService, private router: Router, private produitCommanderListComponent: ProduitCommanderListComponent, private panierService: PanierService, private commandeService: CommandeService){
   }
@@ -40,7 +41,7 @@ export class CommandeComponent implements OnInit{
     }
 
     refreshCommandes() {
-      this.http.get(this.APIUrl + 'GetCommandes').subscribe(data => {
+      this.http.get(this.APIUrl + 'GetReservations').subscribe(data => {
         this.commandeService.commandeList = data;
         this.productsTemp = data;
       });
@@ -66,21 +67,25 @@ export class CommandeComponent implements OnInit{
   }
 
   deleteCommandes(id:any){
-      this.http.delete(this.APIUrl+'DeleteCommandes?id='+id).subscribe(data=>{
-        alert(data);
-      })
+    this.http.delete(this.APIUrl+'DeleteReservations?id='+id).subscribe(data=>{
+      alert(data);
+    })
     this.refreshCommandes();
   }
 
   filtrerCommandes() {
-    const commandesList = this.commandeService.getCommande();
+    const commandesList: any = this.commandeService.getCommande();
 
-    this.productsTemp = commandesList.filter((commande: { username: string; id: number }) =>
-      commande.username.toLowerCase().includes(this.rechercheCommande.toLowerCase())
+    this.commandeList = commandesList.filter((commande: any) =>
+      commande.nom_salle.toLowerCase().includes(this.rechercheSalle.toLowerCase())
     );
 
-    if (this.filtreId !== '') {
-      this.productsTemp = this.productsTemp.filter((commande: { username: string; id: number }) => commande.id.toString() == this.filtreId);
+    this.commandeList = commandesList.filter((commande: any) =>
+      commande.username.toLowerCase().includes(this.rechercheUser.toLowerCase())
+    );
+
+    if (this.rechercheEtage !== '') {
+      this.commandeList = this.commandeList.filter((commande: any) => commande.localisation == this.rechercheEtage);
     }
   }
 }

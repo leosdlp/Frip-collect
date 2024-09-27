@@ -1,50 +1,51 @@
 import { Injectable } from '@angular/core';
 import { Fournisseur } from './fournisseur.model';
+import { User } from './user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FournisseurService {
   selectedFournisseurId: number = -1;
-  private fournisseurs: Fournisseur[] = [];
+  private users: User[] = [];
   newFournisseur: any = [];
-  fournisseursTemp: any = [];
+  usersTemp: any = [];
 
-  
-  getFournisseurs(): Fournisseur[] {
+
+  getFournisseurs(): User[] {
     this.setApiFournisseurs();
-    return this.fournisseurs;
+    return this.users;
   }
 
-  getFournisseurById(id: number): Fournisseur | undefined {
-    return this.fournisseurs.find(fournisseur => fournisseur.id === id);
-  }
+  // getFournisseurById(id: number): Fournisseur | undefined {
+  //   return this.fournisseurs.find(fournisseur => fournisseur.id === id);
+  // }
 
   setApiFournisseurs() {
     const newFournisseurs = [];
-    for (const fournisseur of this.fournisseursTemp) {
-      newFournisseurs.push({ id: fournisseur.id, nom: fournisseur.nom });
+    for (const user of this.usersTemp) {
+      newFournisseurs.push({ username: user.username, password: user.password, email: user.email });
     }
-    this.fournisseurs = newFournisseurs;
+    this.users = newFournisseurs;
   }
 
-  createFournisseur(nouveauFournisseur: Fournisseur) {
-    this.fournisseurs.push(nouveauFournisseur);
-  }
+  // createFournisseur(nouveauFournisseur: Fournisseur) {
+  //   this.fournisseurs.push(nouveauFournisseur);
+  // }
 
-  updateFournisseur(id: number, fournisseurModifie: Fournisseur) {
-    const index = this.fournisseurs.findIndex(fournisseur => fournisseur.id === id);
-    if (index !== 0) {
-      this.fournisseurs[index] = fournisseurModifie;
-    }
-  }
+  // updateFournisseur(id: number, fournisseurModifie: Fournisseur) {
+  //   const index = this.fournisseurs.findIndex(fournisseur => fournisseur.id === id);
+  //   if (index !== 0) {
+  //     this.fournisseurs[index] = fournisseurModifie;
+  //   }
+  // }
 
-  deleteFournisseur(id: number) {
-    const index = this.fournisseurs.findIndex(fournisseur => fournisseur.id === id);
-    if (index !== -1) {
-      this.fournisseurs.splice(index, 1);
-    }
-  }
+  // deleteFournisseur(id: number) {
+  //   const index = this.fournisseurs.findIndex(fournisseur => fournisseur.id === id);
+  //   if (index !== -1) {
+  //     this.fournisseurs.splice(index, 1);
+  //   }
+  // }
 
   setSelectedFournisseurId(id: number) {
     this.selectedFournisseurId = id;

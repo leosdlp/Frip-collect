@@ -19,60 +19,51 @@ import { HttpClient } from '@angular/common/http';
   imports: [RouterOutlet, RouterModule, ReactiveFormsModule,FormsModule, ProduitListComponent, CommonModule, HttpClientModule],
 })
 export class ProduitComponent implements OnInit {
-  produitForm!: FormGroup;
+  classroomForm!: FormGroup;
   fournisseurs: Fournisseur[] = [];
   readonly APIUrl = 'http://localhost:5038/api/fripandcollect/';
-  produitsTemp: any = [];
+  classroomsTemp: any = [];
 
   constructor(private fb: FormBuilder, private produitService: ProduitService, private fournisseurService: FournisseurService, private http: HttpClient) {}
 
   ngOnInit() {
-    this.fournisseurs = this.fournisseurService.getFournisseurs();
-    this.produitForm = this.fb.group({
-      id: [, Validators.required],
-      nom: ['', Validators.required],
-      type: ['', Validators.required],
-      genre: ['', Validators.required],
-      taille: ['', Validators.required],
-      prix: [, Validators.min(0)],
-      etat: ['', Validators.required],
-      fournisseur: ['', Validators.required],
-      nombre: [, Validators.required],
+    // this.fournisseurs = this.fournisseurService.getFournisseurs();
+    this.classroomForm = this.fb.group({
+      id_salle: [, Validators.required],
+      nom_salle: ['', Validators.required],
+      capacite: ['', Validators.required],
+      equipements: [''],
+      localisation: ['', Validators.required],
+      libre: true
     });
   }
   selectedItemFormControl = new FormControl();
 
-  ajouterProduit() {
-    this.addProduits();
-    this.produitForm.reset();
+  ajouterSalle() {
+    this.addClassrooms();
+    this.classroomForm.reset();
   }
 
-  addProduits() {
-    const newProduitNom = this.produitForm.value.nom;
-    const newProduitType = this.produitForm.value.type;
-    const newProduitGenre = this.produitForm.value.genre;
-    const newProduitTaille = this.produitForm.value.taille;
-    const newProduitPrix = this.produitForm.value.prix;
-    const newProduitEtat = this.produitForm.value.etat;
-    const newProduitFournisseur = this.produitForm.value.fournisseur;
-    const newProduitNombre = this.produitForm.value.nombre;
+  addClassrooms() {
+    const nom_salle = this.classroomForm.value.nom_salle;
+    const capacite = this.classroomForm.value.capacite;
+    const equipements = this.classroomForm.value.equipements;
+    const localisation = this.classroomForm.value.localisation;
+    const libre = this.classroomForm.value.libre;
 
-    if (!newProduitNom || !newProduitType || !newProduitGenre || !newProduitTaille || !newProduitPrix || !newProduitEtat || !newProduitFournisseur || !newProduitNombre) {
-      alert("Nom, Type, Genre, Taille, Prix, Etat, Fournisseur and Nombre are required");
+    if (!nom_salle || !capacite || !equipements || !localisation) {
+      alert("id_salle, nom_salle, capacite, equipementsand localisation are required");
       return;
     }
 
     const formData = new FormData();
-    formData.append("nom", newProduitNom);
-    formData.append("type", newProduitType);
-    formData.append("genre", newProduitGenre);
-    formData.append("taille", newProduitTaille);
-    formData.append("prix", newProduitPrix);
-    formData.append("etat", newProduitEtat);
-    formData.append("fournisseur", newProduitFournisseur);
-    formData.append("nombre", newProduitNombre);
+    formData.append("nom_salle", nom_salle);
+    formData.append("capacite", capacite);
+    formData.append("equipements", equipements);
+    formData.append("localisation", localisation);
+    formData.append("libre", libre);
 
-    this.http.post(this.APIUrl + 'AddProduits', formData).subscribe(data => {
+    this.http.post(this.APIUrl + 'AddClassrooms', formData).subscribe(data => {
       alert(data);
     }, error => {
       console.error('Error adding produit:', error);
@@ -84,9 +75,9 @@ export class ProduitComponent implements OnInit {
 
 
   refreshProduits() {
-    this.http.get(this.APIUrl + 'GetProduits').subscribe(data => {
-      this.produitService.produitsTemp = data;
-      this.produitsTemp = data;
+    this.http.get(this.APIUrl + 'GetClassrooms').subscribe(data => {
+      this.produitService.classroomsTemp = data;
+      this.classroomsTemp = data;
     });
     this.produitService.setApiProduits();
     this.produitService.getProduits();

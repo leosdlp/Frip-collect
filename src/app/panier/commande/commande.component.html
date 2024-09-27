@@ -1,60 +1,41 @@
 <div class="container">
   <h1>Commandes</h1>
-  <div class="row filtres">
-    <div class="col-12">
-      <input type="text" [(ngModel)]="rechercheCommande" (input)="filtrerCommandes()" placeholder="Rechercher un utilisateur" class="col-5">
-      <input type="text" id="filtreId" class="col-1" (input)="filtrerCommandes()" [(ngModel)]="filtreId" placeholder="Id">
+  <div class="row">
+    <div class="col-12 filters">
+      <input type="text" [(ngModel)]="rechercheSalle" (input)="filtrerCommandes()" placeholder="Rechercher une salle" class="col-2">
+      <input type="text" [(ngModel)]="rechercheUser" (input)="filtrerCommandes()" placeholder="Rechercher un utilisateur" class="col-2">
+      <select class="col-2" [(ngModel)]="this.rechercheEtage" (ngModelChange)="filtrerCommandes()">
+        <option value="">Tous les étages</option>
+        <option value="1">Rez-de-chaussée</option>
+        <option value="2">1er étage</option>
+        <option value="3">2ème étage</option>
+      </select>
     </div>
   </div>
-  <div *ngFor="let key of getObjectKeys(productsTemp)" class="row">
+  <div *ngFor="let reservation of this.commandeList" class="row">
     <div class="col-8 cont-commande">
-      <div class="row">
-        <div class="col-3 cont-id">
-          <strong>ID:</strong> {{ productsTemp[key].id }}
+      <div class="col-12">
+        <div class="col-12">
+          <strong>Nom:</strong> {{ reservation.nom_salle }}
         </div>
-      </div>
-      <div class="col-12">
-        <div *ngIf="isJsonString(productsTemp[key].products)">
-          <div class="row cont-produit" *ngFor="let product of parseJson(productsTemp[key].products)">
-            <div class="col-3">
-              <strong>ID:</strong> {{ product.id }}
-            </div>
-            <div class="col-3">
-              <strong>Nom:</strong> {{ product.nom }}
-            </div>
-            <div class="col-3">
-              <strong>Type:</strong> {{ product.type }}
-            </div>
-            <div class="col-3">
-              <strong>Genre:</strong> {{ product.genre }}
-            </div>
-            <div class="col-3">
-              <strong>Taille:</strong> {{ product.taille }}
-            </div>
-            <div class="col-3">
-              <strong>Nombre:</strong> {{ product.nombre }}
-            </div>
-            <div class="col-3">
-              <strong>Prix:</strong> {{ product.prix }}
-            </div>
-            <div class="col-3">
-              <strong>État:</strong> {{ product.etat }}
-            </div>
-            <div class="col-3">
-              <strong>Fournisseur:</strong> {{ product.fournisseur }}
-            </div>
-          </div>
+        <div class="col-12">
+          <strong>Capacite:</strong> {{ reservation.capacite }} personnes
         </div>
+        <div class="col-12">
+          <strong>Équipements:</strong> {{ reservation.equipements }}
+        </div>
+        <div class="col-12">
+          <strong>Localisation:</strong> {{ reservation.localisation }}
+        </div>
+        <div class="col-12">
+          <strong>Duree:</strong> {{ reservation.duree }} minutes
+        </div>
+        <div class="col-12">
+          <strong>Réservé par:</strong> {{ reservation.username }}
+        </div>
+        <button (click)="deleteCommandes(reservation.id_reservation)" class="col-2">Supprimer</button>
       </div>
-      <div class="col-12">
-        <p><strong>Prix Total:</strong> {{ productsTemp[key].totalPrice }} €</p>
-      </div>
-      <div class="col-12">
-        <strong>Acheteur:</strong> {{ productsTemp[key].username }}
-      </div>
-      <button (click)="deleteCommandes(productsTemp[key].id)" class="col-2">Supprimer</button>
     </div>
-  </div>
 </div>
 
 

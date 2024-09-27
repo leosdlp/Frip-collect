@@ -5,6 +5,7 @@
   border-radius:.5rem;
   padding:.5rem;
   place-content: center;
+  user-select: none;
 }
 
 h1{
@@ -45,7 +46,7 @@ input,select{
   margin-top:1.5rem;
 }
 
-.filtres{
+.filters{
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
@@ -64,4 +65,12 @@ option{
 
 .ajout:hover{
   transform: scale(1.1);
+}
+
+.true {
+  background-color:rgb(185, 230, 185);
+}
+
+.false {
+  background-color:rgb(223, 178, 178);
 }

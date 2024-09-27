@@ -1,88 +1,40 @@
 <div class="container">
-  <h1>Stock de produits</h1>
-  <div class="row">
-    <div class="col-10">
+  <h1>Salles</h1>
+  <div class="row filters">
+    <div class="col-12">
       <div class="row">
-        <button routerLink="/produit" routerLinkActive="active" class="col-2 ajout">Ajouter un produit</button>
-        <input type="text" [(ngModel)]="rechercheProduit" (input)="filtrerProduits()" placeholder="Rechercher un fournisseur" class="col-5">
+        <button routerLink="/produit" routerLinkActive="active" class="col-2 ajout">Ajouter une classe</button>
+        <input type="text" id="filtreRecherche" class="col-1 test" [(ngModel)]="this.filtreRecherche" (ngModelChange)="filtrerClassrooms()">
+        <label for="filtreLocalisation" class="col-2">Localisation :</label>
+        <select id="filtreLocalisation" class="col-2" [(ngModel)]="this.filtreLocalisation" (ngModelChange)="filtrerClassrooms()">
+          <option value="">Tous les étages</option>
+          <option value="1">Rez-de-chaussée</option>
+          <option value="2">1er étage</option>
+          <option value="3">2ème étage</option>
+        </select>
+        <label for="filtreLibre" class="col-1">Libre :</label>
+        <select id="filtreLibre" class="col-1" [(ngModel)]="this.filtreLibre" (ngModelChange)="filtrerClassrooms()">
+          <option value="">Tous</option>
+          <option value="true">Libre</option>
+          <option value="false">Pas libre</option>
+        </select>
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-12 filtres">
-      <div class="row" (click)="filtrerProduits()">
-        <input type="number" id="filtreId" class="col-1" (input)="filtrerProduits()" [(ngModel)]="filtreId" placeholder="Id">
-        <select id="filtreGenre" class="col-1" [(ngModel)]="filtreGenre">
-          <option value="">--Genres--</option>
-          <option value="homme">Homme</option>
-          <option value="femme">Femme</option>
-        </select>
-        <select id="filtreTaille" class="col-1" [(ngModel)]="filtreTaille">
-          <option value="">--Tailles--</option>
-          <option value="xxs">XXS</option>
-          <option value="xs">XS</option>
-          <option value="s">S</option>
-          <option value="m">M</option>
-          <option value="l">L</option>
-          <option value="xl">XL</option>
-          <option value="xxl">XXL</option>
-        </select>
-        <select id="filtreEtat" class="col-1" [(ngModel)]="filtreEtat">
-          <option value="">--États--</option>
-          <option value="neuf-avec-etiquette">Neuf avec étiquette</option>
-          <option value="neuf-sans-etiquette">Neuf sans étiquette</option>
-          <option value="tres-bon-etat">Très bon état</option>
-          <option value="bon-etat">Bon état</option>
-          <option value="etat-correct">État correct</option>
-        </select>
-        <select id="filtreFournisseur" class="col-2" [(ngModel)]="filtreFournisseur">
-          <option value = "">--Fournisseurs--</option>
-          <option *ngFor="let fournisseur of fournisseurs" [value]="fournisseur.nom">{{ fournisseur.nom }}</option>
-        </select>
-        <select id="filtreType" class="col-1" [(ngModel)]="filtreType">
-          <option value="">--Types--</option>
-          <option value="costume">Costume</option>
-          <option value="blazer">Blazer</option>
-          <option value="t-shirt">T-shirt</option>
-          <option value="manteau">Manteau</option>
-          <option value="veste">Veste</option>
-          <option value="jean">Jean</option>
-          <option value="pull">Pull</option>
-          <option value="sweat">Sweat</option>
-          <option value="pantalon">Pantalon</option>
-          <option value="short">Short</option>
-          <option value="sous-vêtement">Sous-vêtement</option>
-          <option value="pyjama">Pyjama</option>
-          <option value="maillot-de-bain">Maillot de bain</option>
-          <option value="vetement-sport">Vêtement de sport</option>
-          <option value="autre">Autre</option>
-        </select>
-        <input type="number" id="filtrePrix" class="col-1" (input)="filtrerProduits()" [(ngModel)]="filtrePrix" placeholder="Prix max">
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div *ngFor="let produit of produits" class="col-3">
-      <h2>{{ produit.nom }}</h2>
+    <div *ngFor="let classroom of classrooms" class="col-3 {{ classroom.libre }}">
+      <h2>{{ classroom.nom_salle }}</h2>
       <div class="infos row">
-        <p class="col-5">Id : {{ produit.id }}</p>
-        <p class="col-5">Type : {{ produit.type }}</p>
+        <p class="col-5">Id : {{ classroom.id_salle }}</p>
+        <p class="col-5">Capacité : {{ classroom.capacite }}</p>
       </div>
       <div class="infos row">
-        <p class="col-5">Genre : {{ produit.genre }}</p>
-        <p class="col-5">Taille : {{ produit.taille }}</p>
-      </div>
-      <div class="infos row">
-        <p class="col-5">État : {{ produit.etat }}</p>
-        <p class="col-5">Prix : {{ produit.prix }}€</p>
-      </div>
-      <div class="infos row">
-        <p class="col-5">Fournisseur : {{ produit.fournisseur }}</p>
-        <p class="col-5">En stock : {{ produit.nombre }}</p>
+        <p class="col-5">Equipements : {{ classroom.equipements }}</p>
+        <p class="col-5">Localisation : {{ classroom.localisation }}</p>
       </div>
       <div class="buttons row">
-        <button (click)="supprimerProduit(produit.id)" class="col-4">Supprimer</button>
-        <button (click)="modifierProduit(produit.id)" class="col-4">Modifier</button>
+        <button (click)="supprimerProduit(classroom.id_salle)" class="col-4">Supprimer</button>
+        <button (click)="modifierProduit(classroom.id_salle)" class="col-4">Modifier</button>
       </div>
     </div>
   </div>

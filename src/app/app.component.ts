@@ -62,15 +62,15 @@ export class AppComponent implements OnInit {
 
   refreshFournisseurs() {
     this.http.get(this.APIUrl + 'GetFournisseurs').subscribe(data => {
-      this.fournisseurService.fournisseursTemp = data;
+      this.fournisseurService.usersTemp = data;
       this.fournisseursTemp = data;
     });
     this.fournisseurService.setApiFournisseurs();
   }
 
   refreshProduits() {
-    this.http.get(this.APIUrl + 'GetProduits').subscribe(data => {
-      this.produitService.produitsTemp = data;
+    this.http.get(this.APIUrl + 'GetClassrooms').subscribe(data => {
+      this.produitService.classroomsTemp = data;
       this.produitsTemp = data;
     });
     this.produitService.setApiProduits();
@@ -78,7 +78,7 @@ export class AppComponent implements OnInit {
   }
 
   refreshCommandes() {
-    this.http.get(this.APIUrl + 'GetCommandes').subscribe(data => {
+    this.http.get(this.APIUrl + 'GetReservations').subscribe(data => {
       this.commandeService.commandeList = data;
       this.productsTemp = data;
     });
